@@ -1,6 +1,12 @@
 package com.example.e_commerce_shopping_cart.model;
 
 //import com.example.e_commerce_shopping_cart.model.Image;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.util.List;
 import java.math.BigDecimal;
 

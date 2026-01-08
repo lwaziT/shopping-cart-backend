@@ -1,5 +1,11 @@
 package com.example.e_commerce_shopping_cart.model;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 import java.sql.Blob;
 
 @Getter
