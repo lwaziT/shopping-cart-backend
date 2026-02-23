@@ -5,7 +5,6 @@ import com.example.e_commerce_shopping_cart.exceptions.ResourceNotFoundException
 import com.example.e_commerce_shopping_cart.model.Image;
 import com.example.e_commerce_shopping_cart.model.Product;
 import com.example.e_commerce_shopping_cart.repository.ImageRepository;
-import com.example.e_commerce_shopping_cart.repository.ProductRepository;
 import com.example.e_commerce_shopping_cart.service.product.IProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
