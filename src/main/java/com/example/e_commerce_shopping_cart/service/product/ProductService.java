@@ -1,13 +1,18 @@
 package com.example.e_commerce_shopping_cart.service.product;
 
+import com.example.e_commerce_shopping_cart.dto.ImageDTO;
+import com.example.e_commerce_shopping_cart.dto.ProductDTO;
 import com.example.e_commerce_shopping_cart.exceptions.ProductNotFoundException;
 import com.example.e_commerce_shopping_cart.model.Category;
+import com.example.e_commerce_shopping_cart.model.Image;
 import com.example.e_commerce_shopping_cart.model.Product;
 import com.example.e_commerce_shopping_cart.repository.CategoryRepository;
+import com.example.e_commerce_shopping_cart.repository.ImageRepository;
 import com.example.e_commerce_shopping_cart.repository.ProductRepository;
 import com.example.e_commerce_shopping_cart.request.AddProductRequest;
 import com.example.e_commerce_shopping_cart.request.ProductUpdateRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +23,8 @@ import java.util.Optional;
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ImageRepository imageRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public Product addProduct(AddProductRequest request) {
@@ -120,4 +127,48 @@ public class ProductService implements IProductService {
     public Long countProductsByBrandAndName(String brand, String name) {
         return productRepository.countByBrandAndName(brand, name);
     }
+
+    @Override
+    public List<ProductDTO> getConvertedProducts(List<Product> products) {
+        return products.stream().map(this::convertToDTO).toList();
+    }
+
+    @Override
+    public ProductDTO convertToDTO(Product product) {
+        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+        List<Image> images = imageRepository.findByProductId(product.getId());
+        List<ImageDTO> imageDTOS = images.stream().map(image -> modelMapper.map(image, ImageDTO.class)).toList();
+        productDTO.setImages(imageDTOS);
+        return productDTO;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
