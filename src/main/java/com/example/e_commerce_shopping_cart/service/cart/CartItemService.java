@@ -1,5 +1,6 @@
 package com.example.e_commerce_shopping_cart.service.cart;
 
+import com.example.e_commerce_shopping_cart.exceptions.ResourceNotFoundException;
 import com.example.e_commerce_shopping_cart.model.Cart;
 import com.example.e_commerce_shopping_cart.model.CartItem;
 import com.example.e_commerce_shopping_cart.model.Product;
@@ -45,12 +46,33 @@ public class CartItemService implements ICartItemService {
 
     @Override
     public void removeCartItem(Long cartId, Long productId) {
-
+        Cart cart = cartService.getCart(cartId);
+        CartItem itemToRemove = getCartItem(cartId, productId);
+        cart.removeItem(itemToRemove);
+        cartRepository.save(cart);
     }
 
     @Override
     public void updateItemQuantity(Long cartId, Long productId, int quantity) {
+        Cart cart = cartService.getCart(cartId);
+        cart.getCartItems().stream().filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst()
+                .ifPresent(item -> {
+                item.setQuantity(quantity);
+                item.setUnitPrice(item.getProduct().getPrice());
+                item.setTotalPrice();
+                });
+        BigDecimal totalAmount = cart.getTotalAmount();
+        cart.setTotalAmount(totalAmount);
+        cartRepository.save(cart);
+    }
 
+    @Override
+    public CartItem getCartItem(Long cartId, Long productId) {
+        Cart cart = cartService.getCart(cartId);
+        return cart.getCartItems()
+                .stream().filter(item -> item.getProduct().getId().equals(productId))
+                .findFirst().orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 }
 
