@@ -24,11 +24,13 @@ public class CartItemService implements ICartItemService {
     public void addCartItem(Long cartId, Long productId, int quantity) {
         Cart cart = cartService.getCart(cartId);
         Product product = productService.getProductById(productId);
+
         CartItem cartItem = cart.getCartItems()
                 .stream()
                 .filter(item -> item.getProduct().getId().equals(productId))
                 .findFirst()
-                .orElse(new  CartItem());
+                .orElse(new CartItem());
+
         if (cartItem.getId() == null) {
             cartItem.setCart(cart);
             cartItem.setProduct(product);
@@ -37,6 +39,7 @@ public class CartItemService implements ICartItemService {
         } else {
             cartItem.setQuantity(cartItem.getQuantity() + quantity);
         }
+
         cartItem.setTotalPrice();
         cart.addItem(cartItem);
 
@@ -62,7 +65,10 @@ public class CartItemService implements ICartItemService {
                 item.setUnitPrice(item.getProduct().getPrice());
                 item.setTotalPrice();
                 });
-        BigDecimal totalAmount = cart.getTotalAmount();
+        BigDecimal totalAmount = cart.getCartItems()
+                .stream()
+                .map(CartItem ::getTotalPrice)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
         cart.setTotalAmount(totalAmount);
         cartRepository.save(cart);
     }
@@ -71,8 +77,11 @@ public class CartItemService implements ICartItemService {
     public CartItem getCartItem(Long cartId, Long productId) {
         Cart cart = cartService.getCart(cartId);
         return cart.getCartItems()
-                .stream().filter(item -> item.getProduct().getId().equals(productId))
-                .findFirst().orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+                .stream().filter(item -> item.getProduct()
+                        .getId()
+                        .equals(productId))
+                .findFirst()
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 }
 

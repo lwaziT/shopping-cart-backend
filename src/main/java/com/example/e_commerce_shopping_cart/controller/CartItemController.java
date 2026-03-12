@@ -3,6 +3,7 @@ package com.example.e_commerce_shopping_cart.controller;
 import com.example.e_commerce_shopping_cart.exceptions.ResourceNotFoundException;
 import com.example.e_commerce_shopping_cart.response.ApiResponse;
 import com.example.e_commerce_shopping_cart.service.cart.ICartItemService;
+import com.example.e_commerce_shopping_cart.service.cart.ICartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +15,17 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 @RequestMapping("${api.prefix}/cartItems")
 public class CartItemController {
     private final ICartItemService cartItemService;
+    private final ICartService cartService;
 
     @PostMapping("/add-item")
-    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam Long cartId, @RequestParam Long itemId, @RequestParam Integer quantity) {
+    public ResponseEntity<ApiResponse> addItemToCart(@RequestParam(required = false) Long cartId, @RequestParam Long itemId, @RequestParam Integer quantity) {
         try {
+            if(cartId == null){
+                cartId = cartService.initializeNewCart();
+            }
             cartItemService.addCartItem(cartId, itemId, quantity);
             return ResponseEntity.ok(new ApiResponse("Add item success", null));
-        } catch (Exception e) {
+        } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
     }
