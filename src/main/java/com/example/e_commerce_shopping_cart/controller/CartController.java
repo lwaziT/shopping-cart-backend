@@ -38,7 +38,7 @@ public class CartController {
         }
     }
 
-    @GetMapping("/cart-total-price/{cart}")
+    @GetMapping("/cart-total-price/{cartId}")
     public  ResponseEntity<ApiResponse> getTotalAmount(@PathVariable Long cartId) {
         try {
             BigDecimal totalPrice = cartService.getTotalPrice(cartId);

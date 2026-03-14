@@ -5,6 +5,7 @@ import com.example.e_commerce_shopping_cart.model.Cart;
 import com.example.e_commerce_shopping_cart.model.CartItem;
 import com.example.e_commerce_shopping_cart.repository.CartItemRepository;
 import com.example.e_commerce_shopping_cart.repository.CartRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +27,7 @@ public class CartService implements ICartService {
         return cart;
     }
 
+    @Transactional
     @Override
     public void clearCart(Long cartId) {
         Cart cart = getCart(cartId);
