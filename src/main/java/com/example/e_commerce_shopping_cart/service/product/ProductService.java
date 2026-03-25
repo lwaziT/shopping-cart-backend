@@ -1,7 +1,7 @@
 package com.example.e_commerce_shopping_cart.service.product;
 
-import com.example.e_commerce_shopping_cart.dto.ImageDTO;
-import com.example.e_commerce_shopping_cart.dto.ProductDTO;
+import com.example.e_commerce_shopping_cart.dto.ImageDto;
+import com.example.e_commerce_shopping_cart.dto.ProductDto;
 import com.example.e_commerce_shopping_cart.exceptions.ProductNotFoundException;
 import com.example.e_commerce_shopping_cart.model.Category;
 import com.example.e_commerce_shopping_cart.model.Image;
@@ -129,16 +129,16 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public List<ProductDTO> getConvertedProducts(List<Product> products) {
+    public List<ProductDto> getConvertedProducts(List<Product> products) {
         return products.stream().map(this::convertToDTO).toList();
     }
 
     @Override
-    public ProductDTO convertToDTO(Product product) {
-        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+    public ProductDto convertToDTO(Product product) {
+        ProductDto productDTO = modelMapper.map(product, ProductDto.class);
         List<Image> images = imageRepository.findByProductId(product.getId());
-        List<ImageDTO> imageDTOS = images.stream().map(image -> modelMapper.map(image, ImageDTO.class)).toList();
-        productDTO.setImages(imageDTOS);
+        List<ImageDto> imageDtos = images.stream().map(image -> modelMapper.map(image, ImageDto.class)).toList();
+        productDTO.setImages(imageDtos);
         return productDTO;
     }
 

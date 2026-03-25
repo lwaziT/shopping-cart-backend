@@ -1,6 +1,6 @@
 package com.example.e_commerce_shopping_cart.service.image;
 
-import com.example.e_commerce_shopping_cart.dto.ImageDTO;
+import com.example.e_commerce_shopping_cart.dto.ImageDto;
 import com.example.e_commerce_shopping_cart.exceptions.ResourceNotFoundException;
 import com.example.e_commerce_shopping_cart.model.Image;
 import com.example.e_commerce_shopping_cart.model.Product;
@@ -29,10 +29,10 @@ public class ImageService implements IImageService{
     }
 
     @Override
-    public List<ImageDTO> saveImages(List<MultipartFile> files, Long productId) {
+    public List<ImageDto> saveImages(List<MultipartFile> files, Long productId) {
         Product product = productService.getProductById(productId);
 
-        List<ImageDTO> imageDTOS = new ArrayList<>();
+        List<ImageDto> imageDtos = new ArrayList<>();
 
         for (MultipartFile file : files) {
             try{
@@ -50,17 +50,17 @@ public class ImageService implements IImageService{
 
                 imageRepository.save(savedImage);
 
-                ImageDTO imageDTO = new ImageDTO();
+                ImageDto imageDTO = new ImageDto();
                 imageDTO.setId(savedImage.getId());
                 imageDTO.setFileName(savedImage.getFileName());
                 imageDTO.setDownloadUrl(savedImage.getDownloadUrl());
-                imageDTOS.add(imageDTO);
+                imageDtos.add(imageDTO);
 
             } catch (IOException | SQLException e) {
                 throw new RuntimeException(e.getMessage());
             }
         }
-        return imageDTOS;
+        return imageDtos;
     }
 
     @Override

@@ -1,6 +1,6 @@
 package com.example.e_commerce_shopping_cart.service.product;
 
-import com.example.e_commerce_shopping_cart.dto.ProductDTO;
+import com.example.e_commerce_shopping_cart.dto.ProductDto;
 import com.example.e_commerce_shopping_cart.model.Category;
 import com.example.e_commerce_shopping_cart.model.Product;
 import com.example.e_commerce_shopping_cart.request.AddProductRequest;
@@ -21,7 +21,7 @@ public interface IProductService {
     Product updateProduct(ProductUpdateRequest product, Long productId);
     Long countProductsByBrandAndName(String brand, String name);
 
-    List<ProductDTO> getConvertedProducts(List<Product> products);
+    List<ProductDto> getConvertedProducts(List<Product> products);
 
-    ProductDTO convertToDTO(Product product);
+    ProductDto convertToDTO(Product product);
 }
