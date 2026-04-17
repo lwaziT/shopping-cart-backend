@@ -1,5 +1,6 @@
 package com.example.e_commerce_shopping_cart.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

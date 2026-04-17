@@ -12,6 +12,7 @@ import com.example.e_commerce_shopping_cart.repository.ProductRepository;
 import com.example.e_commerce_shopping_cart.service.cart.CartService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -25,6 +26,7 @@ public class OrderService implements IOrderService{
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final CartService cartService;
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
@@ -80,7 +82,8 @@ public class OrderService implements IOrderService{
         return orders.stream().map(this::convertToDto).toList();
     }
 
-    private OrderDto convertToDto(Order order) {
+    @Override
+    public OrderDto convertToDto(Order order) {
         return modelMapper.map(order, OrderDto.class);
     }
 

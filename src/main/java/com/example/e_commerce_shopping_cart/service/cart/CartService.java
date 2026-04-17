@@ -3,6 +3,7 @@ package com.example.e_commerce_shopping_cart.service.cart;
 import com.example.e_commerce_shopping_cart.exceptions.ResourceNotFoundException;
 import com.example.e_commerce_shopping_cart.model.Cart;
 import com.example.e_commerce_shopping_cart.model.CartItem;
+import com.example.e_commerce_shopping_cart.model.User;
 import com.example.e_commerce_shopping_cart.repository.CartItemRepository;
 import com.example.e_commerce_shopping_cart.repository.CartRepository;
 import jakarta.transaction.Transactional;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
@@ -46,9 +48,12 @@ public class CartService implements ICartService {
     }
 
     @Override
-    public Long initializeNewCart(){
-        Cart newCart = new Cart();
-        return cartRepository.save(newCart).getId();
+    public Cart initializeNewCart(User user){
+        return Optional.ofNullable(getCartByUserId(user.getId())).orElseGet(() -> {
+            Cart cart = new Cart();
+            cart.setUser(user);
+            return cartRepository.save(cart);
+        });
     }
 
     @Override
